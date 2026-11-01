@@ -1,0 +1,27 @@
+[
+  {
+    "amount": 320,
+    "url": "https://xforgeassets002.xboxlive.com/pf-namespace-b63a0803d3653643/65aac2ef-7b8a-48b1-ad1a-2cf871123b6a/4e8b34ea-5608-49a2-a978-ab63273e7d0a.png",
+    "sha256": "2cb705106911001782e37566e002f757b294bea567fd09f7aad2cb02d5912890"
+  },
+  {
+    "amount": 1020,
+    "url": "https://xforgeassets002.xboxlive.com/pf-namespace-b63a0803d3653643/57ed68ed-fbd6-462d-94a2-77a409e5f40e/f65da975-5a7b-40fd-a6c3-ca108a592b00.png",
+    "sha256": "5dc53eef9ddb72edf06f5884d34f468021f21efd9e96a21510256c4bfaecc9a4"
+  },
+  {
+    "amount": 1720,
+    "url": "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/4402cfa2-0859-4621-9fc4-a3361c21450c/d791a2a2-d36d-4ab0-a35f-fb38eee59382.png",
+    "sha256": "5c36978974aae349ec945c13352ab70dca85f87c8f42d4e48040e961d50ebb4a"
+  },
+  {
+    "amount": 3500,
+    "url": "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/7cf6188f-ba9f-450d-bd32-14870dff35c6/52f842b8-63b2-4fa6-9c03-ac61afbd6ce1.png",
+    "sha256": "55886b17e4c93a36721f8e65712b839cdfd95160626c713e6beee12b52cc38cc"
+  },
+  {
+    "amount": 8800,
+    "url": "https://xforgeassets001.xboxlive.com/pf-namespace-b63a0803d3653643/fbf9f141-7123-49a0-a295-f1f63e14d15c/7a989452-62e6-4d37-8e06-a7f594dec6ef.png",
+    "sha256": "92ab78360e226523a068ec20db2dce18f7a7123d60162c3e8cdf20c8116f301a"
+  }
+]

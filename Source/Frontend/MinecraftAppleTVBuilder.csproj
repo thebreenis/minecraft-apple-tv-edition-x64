@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>MinecraftAppleTVBuilder</AssemblyName>
+    <RootNamespace>MinecraftAppleTVBuilder</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>1.0.0</Version>
+    <Company>TheBreenis</Company>
+    <Product>Minecraft Apple TV Builder</Product>
+    <Description>Build and install Minecraft Apple TV from user-supplied original APPXs</Description>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildProjectDirectory)\obj\BuilderPayload.zip" LogicalName="BuilderPayload.zip" />
+  </ItemGroup>
+  <Target Name="CreateBuilderPayload" BeforeTargets="PrepareForBuild">
+    <MakeDir Directories="$(MSBuildProjectDirectory)\obj" />
+    <ZipDirectory SourceDirectory="$(MSBuildProjectDirectory)\..\Backend" DestinationFile="$(MSBuildProjectDirectory)\obj\BuilderPayload.zip" Overwrite="true" />
+  </Target>
+</Project>

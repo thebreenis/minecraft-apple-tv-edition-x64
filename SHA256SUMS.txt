@@ -1,0 +1,3 @@
+dbeb8207f6c24d44ed1312f672242238e60771d8aea61edf7d0aa807ee33c735  Minecraft-AppleTV-Patcher-Source.zip
+ba9fa1c293eeea95db8ec47fce5ebad5c5c6192cbd8a0e3c11de7956f4366dd5  Minecraft-AppleTV-Patcher-1.0.0.zip
+ae2d950b2a11091c3dceb0b2e9260c3d94fbadb909965d389583734a54c1edc5  MinecraftAppleTVBuilder.exe

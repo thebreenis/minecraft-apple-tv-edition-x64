@@ -1,0 +1,22 @@
+{
+  "Publisher": "CN=Microsoft Corporation, O=Microsoft Corporation, L=Redmond, S=Washington, C=US",
+  "Frameworks": [
+    {
+      "Name": "Microsoft.VCLibs.140.00",
+      "Minimum": "14.0.24123.0",
+      "File": "Microsoft.VCLibs.x64.14.00.appx",
+      "SHA256": "9C17B521F9D690A1F504DA5108ED6EEC5669EB3A8FD1331EEF43E40D84E74283"
+    },
+    {
+      "Name": "Microsoft.Services.Store.Engagement",
+      "Minimum": "10.0.1610.0",
+      "File": "Microsoft.Services.Store.Engagement.x64.10.0.appx",
+      "SHA256": "B6A50A8155BAFD82727B5D5D1A3DB513E8E972E3A08740F7CD241A5B474EB328"
+    }
+  ],
+  "BuilderVersion": "1.0.0",
+  "InputVersion": "1.1.500.0",
+  "OutputVersion": "1.1.500.210",
+  "DesktopSHA256": "67E14091B5E764007E3F246B8D14A123429CBF2D464A1E79A6A525DC2A8BADEB",
+  "AppleTVSHA256": "E22F698B96A07E86120813F6559AD1AA097E920FB48D2A206FF4705AF42C9D08"
+}
