@@ -2,7 +2,7 @@
 
 [Download the latest patcher](https://github.com/thebreenis/minecraft-apple-tv-edition-x64/releases/latest)
 
-Build the .210 compatibility project using your own **Minecraft-1.1.5.0.Appx** and **Minecraft_1.1.5_decrypted.tipa**. This follows the [Windows 10 Mobile builder](https://github.com/thebreenis/minecraft-windows-10-mobile-x64)'s two-file GUI, build-only mode, local signing and optional installation workflow.
+Build a version of Minecraft: Apple TV Edition that runs on Windows using your own **Minecraft-1.1.5.0.Appx** and **Minecraft_1.1.5_decrypted.tipa**.
 
 ## Use
 
@@ -29,9 +29,9 @@ The builder does not supply or download either game, decrypt Apple packages, or 
 ## What is reconstructed
 
 - The supplied Windows game provides the x64 engine, ordinary assets and resource index.
-- Hash-checked byte edits reproduce .210's engine, manifest, Xbox configuration and UI changes.
+- Hash-checked byte edits reproduce the engine, manifest, Xbox configuration and UI changes.
 - Original bridge/launcher code supplies sign-in, Store compatibility, presence filtering and the three achievement-trigger repairs.
-- The Apple TV TIPA provides the title, splash and tile artwork. Square tiles are generated from its background and title rather than redistributing the separately prepared .210 square image. The standalone launcher EXE has no embedded Minecraft icon; its Start entry uses the generated package artwork.
+- The Apple TV TIPA provides the title, splash and tile artwork. Square tiles are generated from its background and title rather than redistributing the separately prepared square image. The standalone launcher EXE has no embedded Minecraft icon; its Start entry uses the generated package artwork.
 - Five Minecoin images are fetched from pinned public Microsoft asset URLs and verified before conversion. Internet access is required for these five images during a build. No paid content is downloaded or purchased by the builder.
 - A public catalog metadata snapshot is included; additional Store artwork is fetched by the running bridge. This is not a bundle of downloadable Marketplace packs.
 
