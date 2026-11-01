@@ -4,6 +4,14 @@
 
 Build a version of Minecraft: Apple TV Edition that runs on Windows using your own **Minecraft-1.1.5.0.Appx** and **Minecraft_1.1.5_decrypted.tipa**.
 
+-Minecraft: Apple TV Edition on Windows x64, preserving the original 1.1.5 experience.
+-Xbox Live integration, including sign-in, Apple TV presence, and achievements—with fixes for three broken achievement triggers.
+-Restored Marketplace, supporting owned content, free claims, Minecoin spending, and Minecoin purchases.
+-Compatibility-aware Store, blocking unsupported purchases and downloads while allowing free items to be claimed.
+-Easy-to-use patcher, building and installing the game from user-supplied files without distributing Minecraft itself.
+
+Original files sourced from Archive.org.
+
 ## Use
 
 1. Run **MinecraftAppleTVBuilder.exe**. No Python or .NET installation is needed to open the released EXE.
