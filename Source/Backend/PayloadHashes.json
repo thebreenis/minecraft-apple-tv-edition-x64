@@ -5,7 +5,7 @@
   },
   {
     "path": "Build.json",
-    "sha256": "d92afee8f540afff2ee98f7ad95768befbd44bdcbb1fc93ec4d549797da995a7"
+    "sha256": "4c7397f15a9695db7f999cd753bc837099360ab42a479129cce92dbf0ee6fb8a"
   },
   {
     "path": "Builder.Core.ps1",
@@ -665,7 +665,7 @@
   },
   {
     "path": "Transfer/Install-Trust.ps1",
-    "sha256": "800903bd87a36dd04770bbfb2d7dd3d0e2471b53c50f87f3ab4f17cd26ffa8bb"
+    "sha256": "807526d0eca9e51b642ce39e909b9462c5e52585b904b756c250fc5454d5464a"
   },
   {
     "path": "Transfer/Install.cmd",
@@ -673,6 +673,6 @@
   },
   {
     "path": "Transfer/Install.ps1",
-    "sha256": "5b141afdb3c91e06c7d8fad27b836a0ede89bcfdc884e8b62c336a766f44cdea"
+    "sha256": "7e1a4521ebff510fd589d31186ec686d8e9e6cce8a7a888ac9bb692ac43f2bbc"
   }
 ]

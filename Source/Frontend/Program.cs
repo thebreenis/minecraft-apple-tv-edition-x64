@@ -113,7 +113,7 @@ internal static class Program
             if (!Convert.ToHexString(SHA256.HashData(data)).Equals(file.GetProperty("sha256").GetString(), StringComparison.OrdinalIgnoreCase)) throw new InvalidDataException("Payload integrity failure: " + name);
         }
         string? coreLibrary = Process.GetCurrentProcess().Modules.Cast<ProcessModule>().FirstOrDefault(m => m.ModuleName.Equals("coreclr.dll", StringComparison.OrdinalIgnoreCase))?.FileName;
-        File.WriteAllText(report, JsonSerializer.Serialize(new { status = "passed", architecture = RuntimeInformation.ProcessArchitecture.ToString(), runtime = RuntimeEnvironment.GetRuntimeDirectory(), framework = RuntimeInformation.FrameworkDescription, coreRuntimeLibrary = coreLibrary, embeddedFiles = zip.Entries.Count, verifiedFrameworks = frameworks, version = "1.0.0" }, new JsonSerializerOptions { WriteIndented = true }));
+        File.WriteAllText(report, JsonSerializer.Serialize(new { status = "passed", architecture = RuntimeInformation.ProcessArchitecture.ToString(), runtime = RuntimeEnvironment.GetRuntimeDirectory(), framework = RuntimeInformation.FrameworkDescription, coreRuntimeLibrary = coreLibrary, embeddedFiles = zip.Entries.Count, verifiedFrameworks = frameworks, version = "1.0.1" }, new JsonSerializerOptions { WriteIndented = true }));
     }
 
     private static async Task<int> VerifyBuildAsync(Request request, string report)

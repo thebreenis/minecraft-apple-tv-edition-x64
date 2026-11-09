@@ -91,3 +91,9 @@ The second command uses build-only mode, declines interactive dependency setup, 
 Publish source from this folder and place **MinecraftAppleTVBuilder.exe** in a GitHub Release. Do not upload the earlier full-game ZIP. `.gitignore` excludes game archives, certificates, output packages, logs and compiler products; the two Microsoft runtime framework APPXs are deliberate exceptions.
 
 The MIT license covers original project code only. Minecraft assets, Microsoft frameworks, .NET, Python, PyInstaller and other dependencies retain their own licenses. Requiring user-supplied inputs avoids bundling the game; it is not a guarantee of approval by Microsoft, Mojang, Apple or GitHub. This is an unofficial community project.
+
+## Version 1.0.1
+
+Fixes fresh installation from generated transfer packages: certificate trust is prepared first, the game is installed next, and loopback access is configured only after the package exists. An already trusted matching certificate is reused. Elevated setup failures now include a saved diagnostic log and the native error code.
+
+The game remains build .210. No account, authentication, gameplay, or Store behavior changed.

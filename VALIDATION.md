@@ -24,3 +24,12 @@ This verifies reconstruction and build-only operation on the development PC. A f
 
 The source archive was extracted separately. After correcting the helper script's single-argument array handling, Build-Helpers.ps1 rebuilt the Python helpers and native DLL, and Publish.ps1 produced a self-contained GUI EXE. Its payload self-test passed. The rebuilt native DLL's .text and .data sections match the .210 DLL byte-for-byte. This used the development PC's installed Python/compiler/SDK toolchains; it did not reuse unpublished source files.
 
+
+## 1.0.1 installer repair (2026-11-09)
+
+- Updated transfer installer: trust matching certificate, install APPX/frameworks, then configure loopback. Errors are saved to phase-specific logs.
+- Successful reinstall after uninstall on the development PC: .210 registered with Status Ok, native bridge present, loopback family listed. This used the repaired original .210 transfer package.
+- Published builder self-test: passed, version 1.0.1, 170 embedded files and two framework packages verified.
+- Full build-only reconstruction from both original inputs: exit 0; generated transfer installer CheckOnly passed in Windows PowerShell 5.1. No game installed by that reconstruction test.
+- Unchanged helper binaries reused only after matching every binary against the preceding tracked payload hashes. Frontend rebuilt with .NET 8.
+- A separate clean PC installation and fresh-account gameplay remain untested.

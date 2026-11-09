@@ -13,11 +13,22 @@ $existing=Get-AppxPackage -Name Microsoft.MinecraftUWP
 if($existing -and -not (Test-Path -LiteralPath (Join-Path $existing.InstallLocation 'XINPUTATV.dll'))) {
     throw 'Another Minecraft for Windows installation uses this package identity. Back up its worlds and uninstall it yourself before installing this edition. Nothing was removed.'
 }
-Write-Host 'Setup will trust the included community signing certificate and enable this game to contact its local helpers.'
-Write-Host 'Windows will request administrator permission for those two settings.'
-$args='-NoProfile -ExecutionPolicy Bypass -File "'+(Join-Path $root 'Install-Trust.ps1')+'"'
-$process=Start-Process powershell.exe -Verb RunAs -ArgumentList $args -PassThru -Wait -WindowStyle Hidden
-if($process.ExitCode -ne 0){throw 'Certificate/loopback setup did not complete.'}
+function Invoke-ElevatedSetup([string]$Phase) {
+    $logPath=Join-Path $root ('Install-'+$Phase+'-'+(Get-Date -Format 'yyyyMMdd-HHmmss')+'.log')
+    $setupArguments='-NoProfile -ExecutionPolicy Bypass -File "'+(Join-Path $root 'Install-Trust.ps1')+'" -Phase '+$Phase+' -LogPath "'+$logPath+'"'
+    $process=Start-Process powershell.exe -Verb RunAs -ArgumentList $setupArguments -PassThru -Wait -WindowStyle Hidden
+    if($process.ExitCode -ne 0){
+        $detail=if(Test-Path -LiteralPath $logPath){Get-Content -LiteralPath $logPath -Raw}else{'No helper log was created.'}
+        throw "$Phase setup did not complete (exit $($process.ExitCode)). $detail Log: $logPath"
+    }
+}
+$certificatePath=Join-Path $root 'Minecraft-AppleTV-Edition.cer'
+$certificate=New-Object Security.Cryptography.X509Certificates.X509Certificate2($certificatePath)
+if($certificate.Thumbprint -ne '{CERT_THUMBPRINT}' -or $certificate.HasPrivateKey){throw 'Unexpected certificate.'}
+if(-not (Test-Path -LiteralPath ('Cert:\LocalMachine\TrustedPeople\'+$certificate.Thumbprint))) {
+    Write-Host 'Windows will request administrator permission to trust the included community signing certificate.'
+    Invoke-ElevatedSetup 'Certificate'
+}
 $dependencies=@()
 foreach($file in Get-ChildItem -LiteralPath (Join-Path $root 'Dependencies') -Filter '*.appx') {
     $name=if($file.Name -like '*VCLibs*'){'Microsoft.VCLibs.140.00'}else{'Microsoft.Services.Store.Engagement'}
@@ -26,5 +37,7 @@ foreach($file in Get-ChildItem -LiteralPath (Join-Path $root 'Dependencies') -Fi
 }
 $app=Join-Path $root '{PACKAGE_FILENAME}'
 if($dependencies.Count){Add-AppxPackage -Path $app -DependencyPath $dependencies}else{Add-AppxPackage -Path $app}
+Write-Host 'Windows will request administrator permission to enable local helper connections.'
+Invoke-ElevatedSetup 'Loopback'
 Write-Host 'Installed. Open Minecraft: Apple TV Edition from the Start menu.'
 Write-Host 'Use the same account in the Xbox app and Microsoft Store before starting.'

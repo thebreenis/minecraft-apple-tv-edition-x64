@@ -8,7 +8,7 @@
     <AssemblyName>MinecraftAppleTVBuilder</AssemblyName>
     <RootNamespace>MinecraftAppleTVBuilder</RootNamespace>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Company>TheBreenis</Company>
     <Product>Minecraft Apple TV Builder</Product>
     <Description>Build and install Minecraft Apple TV from user-supplied original APPXs</Description>
