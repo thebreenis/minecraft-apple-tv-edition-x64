@@ -47,7 +47,7 @@ The builder does not supply or download either game, decrypt Apple packages, or 
 - Five Minecoin images are fetched from pinned public Microsoft asset URLs and verified before conversion. Internet access is required for these five images during a build. No paid content is downloaded or purchased by the builder.
 - A public catalog metadata snapshot is included; additional Store artwork is fetched by the running bridge. This is not a bundle of downloadable Marketplace packs.
 
-The obsolete, unused XInputUap.dll from the development staging folder is omitted. The engine imports the included XINPUTATV.dll. Generated signatures and package metadata naturally differ between machines. Build-only produces 1.1.500.210; an installed compatibility build may require a higher package revision for updating, without changing the engine version or patch behavior.
+The obsolete, unused XInputUap.dll from the development staging folder is omitted. The engine imports the included XINPUTATV.dll. Generated signatures and package metadata naturally differ between machines. Build-only produces 1.1.500.212; an installed compatibility build may require a higher package revision for updating, without changing the engine version or patch behavior.
 
 ## Certificates, data and dependencies
 
@@ -97,3 +97,11 @@ The MIT license covers original project code only. Minecraft assets, Microsoft f
 Fixes fresh installation from generated transfer packages: certificate trust is prepared first, the game is installed next, and loopback access is configured only after the package exists. An already trusted matching certificate is reused. Elevated setup failures now include a saved diagnostic log and the native error code.
 
 The game remains build .210. No account, authentication, gameplay, or Store behavior changed.
+
+## Version 1.0.2 / game package .212
+
+Fixes launcher rejection when Windows exposes matching Xbox and Microsoft Store account IDs but omits the optional Gamertag display value. Account IDs and the bridge Xbox user ID are still checked; missing display names no longer prevent bridge sign-in. The affected user confirmed successful operation with the previously failing account.
+
+Installation now checks Windows version, required frameworks, installed bridge files, launcher registration and loopback access. Run Collect-Diagnostics.cmd after a failure to collect a report on the Desktop. Structured startup logs record bootstrap, account checks, authentication stages and bridge/game startup. Logs rotate at 1 MiB and omit tokens, raw account IDs, URLs and raw exception text. The diagnostic report includes the legacy Gamertag when available, but not emails, authentication caches, saved worlds or purchase records. Do not share raw requests.log files.
+
+The underlying engine/native gameplay fixes remain based on .210; the package revision is now .212. Existing .211 installations can update using Install.cmd without an uninstall.

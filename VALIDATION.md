@@ -33,3 +33,11 @@ The source archive was extracted separately. After correcting the helper script'
 - Full build-only reconstruction from both original inputs: exit 0; generated transfer installer CheckOnly passed in Windows PowerShell 5.1. No game installed by that reconstruction test.
 - Unchanged helper binaries reused only after matching every binary against the preceding tracked payload hashes. Frontend rebuilt with .NET 8.
 - A separate clean PC installation and fresh-account gameplay remain untested.
+
+## 1.0.2 / .212 account metadata fix
+
+- Affected-PC report: all 11 installation checks passed; Xbox/Store account IDs matched; XUID present; only Gamertag registry value missing. Startup trace confirmed rejection before bridge authentication.
+- Removed only the optional display-name requirement. Six regression tests pass, covering missing registry Gamertag, correct/incorrect bridge identity, mismatched Windows accounts, missing stable IDs and existing named accounts.
+- Windows PowerShell 5.1 diagnostic collector: 11 checks passed, zero collection errors locally. Structured logging tests covered redaction, rotation, deduplication and logging-failure isolation. Frozen launcher bootstrap test passed without initiating authentication.
+- Full .212 build-only reconstruction exited 0. Generated installer CheckOnly passed; manifest revision and embedded launcher hash verified.
+- User confirmed .212 works completely on the previously failing account on the affected PC (2026-11-09). This is not a fresh achievement or multiplayer validation.

@@ -55,7 +55,8 @@ try {
     Write-Progress -Activity 'Apple TV Builder' -Status 'Reconstructing game, UI and Apple TV artwork' -PercentComplete 20
     & (Join-Path $PSScriptRoot 'Reconstruct.exe') --desktop $DesktopAppx --apple $AppleTVTipa --backend $PSScriptRoot --stage $stage | ForEach-Object { Write-Host $_ }
     if ($LASTEXITCODE -ne 0) { throw 'Reconstruction failed. See the preceding message; original inputs are unchanged.' }
-    if ($version -ne $config.OutputVersion) {
+    # Reconstruction verifies the baseline .210 recipe first; stamp the requested revision afterward.
+    if ($version) {
         $path=Join-Path $stage 'AppxManifest.xml'
         $doc=[xml]::new();$doc.XmlResolver=$null;$doc.Load($path);$doc.Package.Identity.SetAttribute('Version',$version);$doc.Save($path)
     }
@@ -70,7 +71,7 @@ try {
     Test-PackageSignature $appx $cert.Thumbprint
     Export-BuildOnlyFiles $OutputDirectory $appx $config $PSScriptRoot
     [ordered]@{BuilderVersion=$config.BuilderVersion;PackageVersion=$version;DesktopSHA256=$config.DesktopSHA256;AppleTVSHA256=$config.AppleTVSHA256;PackageSHA256=(Get-FileHash -LiteralPath $appx -Algorithm SHA256).Hash;CertificateThumbprint=$cert.Thumbprint;CertificateExpires=$cert.NotAfter.ToString('o');SelfSigned=$true;CreatedUTC=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $OutputDirectory 'Build-Report.json') -Encoding UTF8
-    foreach ($name in 'Install.cmd','Install.ps1','Install-Trust.ps1') {
+    foreach ($name in 'Install.cmd','Install.ps1','Install-Trust.ps1','Collect-Diagnostics.cmd','Collect-Diagnostics.ps1') {
         $text=[IO.File]::ReadAllText((Join-Path $PSScriptRoot ('Transfer\'+$name)))
         $text=$text.Replace('{CERT_THUMBPRINT}',$cert.Thumbprint).Replace('{PACKAGE_FILENAME}',[IO.Path]::GetFileName($appx))
         [IO.File]::WriteAllText((Join-Path $OutputDirectory $name),$text)

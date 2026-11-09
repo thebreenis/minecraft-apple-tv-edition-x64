@@ -1,11 +1,11 @@
 [
   {
     "path": "Build-MinecraftAppleTV.ps1",
-    "sha256": "f4510c70864e2f337df369c26a4b0ca854eeec6908c6f30546da628fd66a6d23"
+    "sha256": "fbc1d534a7ba9d4414b29efd335e3d736462e24bccd02b0651ccd7bf834e0bf7"
   },
   {
     "path": "Build.json",
-    "sha256": "4c7397f15a9695db7f999cd753bc837099360ab42a479129cce92dbf0ee6fb8a"
+    "sha256": "b5432f130471d1aba47b56ea09267aa8aae7187561d0c92ceb9c1bc31f729afb"
   },
   {
     "path": "Builder.Core.ps1",
@@ -645,7 +645,7 @@
   },
   {
     "path": "Payload/Minecraft-AppleTV-Edition.exe",
-    "sha256": "c436015c45f301204faa418f518ea9340256abe882a637cd527eeef1c5ab06e4"
+    "sha256": "e132c884d606d38cd0865a9258af4b33305783ed27ad7deb9191bb95ef6a1f7e"
   },
   {
     "path": "Payload/modern-store-root.json",
@@ -661,7 +661,15 @@
   },
   {
     "path": "Reconstruct.exe",
-    "sha256": "1fc2f47f8d49cdb19ff22cca63a85e45515a7037b7e39e85a1a910eb7c5a307d"
+    "sha256": "03ab64158812f474c188e156e74d8d305df9d07c244ef90524df1295cea0764a"
+  },
+  {
+    "path": "Transfer/Collect-Diagnostics.cmd",
+    "sha256": "30e60bfc6c5a1aac497ad08cf189016dc9a5e8948a463943b3de5ae3b9be6984"
+  },
+  {
+    "path": "Transfer/Collect-Diagnostics.ps1",
+    "sha256": "5af0a70b1f0c79ceccb5d50731c0fd14c46f2c99afced376804dbb4af23b5707"
   },
   {
     "path": "Transfer/Install-Trust.ps1",
@@ -673,6 +681,6 @@
   },
   {
     "path": "Transfer/Install.ps1",
-    "sha256": "7e1a4521ebff510fd589d31186ec686d8e9e6cce8a7a888ac9bb692ac43f2bbc"
+    "sha256": "d319caa01da0a79a677062d27d5cffdce1ec176bee73507a828cffb8c24788d1"
   }
 ]

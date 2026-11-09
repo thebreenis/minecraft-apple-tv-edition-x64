@@ -1,6 +1,7 @@
 """Local account preflight. Reads identity metadata only, never token stores."""
 import socket,struct,time
 import os,sys
+import startup_diagnostics as diagnostics
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -19,7 +20,9 @@ def windows_accounts():
     def value(path,name):
         try:
             with winreg.OpenKey(winreg.HKEY_CURRENT_USER,path) as key:return winreg.QueryValueEx(key,name)[0]
-        except OSError:return ''
+        except OSError as error:
+            diagnostics.once('identity_read_failed_'+name, field=name, winerror=getattr(error,'winerror',None))
+            return ''
     xbox=r'Software\Microsoft\XboxLive'
     xid=normalize(value(xbox,'AccountId'));sid=normalize(value(r'Software\Microsoft\Windows\CurrentVersion\Store','PrimaryWebAccountId'))
     tag=str(value(xbox,'Gamertag'));label=''
@@ -37,14 +40,17 @@ def windows_accounts():
     return Accounts(xid,str(value(xbox,'Xuid')),tag,sid,label)
 
 def decision(accounts,bridge_xuid=''):
-    if not all((accounts.xbox_id,accounts.xbox_xuid,accounts.xbox_tag,accounts.store_id)):return 'unverified'
+    # Gamertag is optional display metadata, not an account identifier.
+    if not all((accounts.xbox_id,accounts.xbox_xuid,accounts.store_id)):return 'unverified'
     if accounts.xbox_id!=accounts.store_id:return 'windows_mismatch'
     if str(bridge_xuid)!=accounts.xbox_xuid:return 'reauth'
     return 'ready'
 
 def describe(accounts,bridge_tag='Not connected'):
-    return '\n'.join(['Xbox app: '+(accounts.xbox_tag or 'Not signed in / unavailable'),
-        'Microsoft Store: '+(accounts.store_label or 'Not signed in / unavailable'),
+    xbox_label=accounts.xbox_tag or ('Account detected (Gamertag unavailable)' if accounts.xbox_id and accounts.xbox_xuid else 'Account could not be verified')
+    store_label=accounts.store_label or ('Same account as Xbox app' if accounts.store_id and accounts.store_id==accounts.xbox_id else 'Account detected (name unavailable)' if accounts.store_id else 'Account could not be verified')
+    return '\n'.join(['Xbox app: '+xbox_label,
+        'Microsoft Store: '+store_label,
         'Apple TV bridge: '+(bridge_tag or 'Not connected')])
 
 def bridge_request(host,port,method,url):
@@ -120,6 +126,9 @@ def stop_legacy_bridge(port):
     subprocess.run(['taskkill.exe','/PID',str(pid),'/F'],check=True,capture_output=True,creationflags=0x08000000)
 
 def reject_message(accounts,bridge_tag):
+    if decision(accounts) == 'unverified':
+        alert(describe(accounts,bridge_tag)+'\n\nWindows account information could not be read or is incomplete. This does not necessarily mean the apps are signed out. Bridge sign-in has not started. Open the Xbox app and Microsoft Store with the same account, then retry. If this continues, run Collect-Diagnostics.cmd and share the diagnostic report. No account was changed.')
+        return
     alert(describe(accounts,bridge_tag)+'\n\nSign into the SAME Microsoft account in the Xbox app and Microsoft Store, then reopen Minecraft: Apple TV Edition. The game cannot continue.')
 
 def alert(message):

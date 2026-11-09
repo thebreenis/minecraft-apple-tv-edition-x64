@@ -15,6 +15,7 @@ from pathlib import Path
 
 import requests
 import account_guard
+import startup_diagnostics as diagnostics
 
 from appletv_auth_probe import (
     DEFAULT_MSA_CLIENT_ID,
@@ -150,6 +151,8 @@ class BridgeHandler(socketserver.StreamRequestHandler):
             url_text = url.decode("utf-8")
             print(f"Apple TV signing: {method_text} {url_text}", flush=True)
             log_event(f"SIGN {method_text} {url_text}")
+            # Do not persist URLs, headers or tokens in shareable diagnostics.
+            diagnostics.once('bridge_signing_request_received')
             state: BridgeState = self.server.bridge_state
             if method_text=='CONTROL' and url_text=='local://account-switch':
                 write_response(self.wfile,0,['STOPPING','','','','','',''])
@@ -259,12 +262,14 @@ class ThumbnailHandler(BaseHTTPRequestHandler):
 
 
 def launch_game(reuse_services=False) -> None:
+    diagnostics.event('game_launch_requested', reuse_services=bool(reuse_services))
     import auth_progress
     auth_progress.check_cancelled()
     if getattr(sys,'frozen',False) and not reuse_services:
         import packaged_services
         packaged_services.start()
     subprocess.Popen(["explorer.exe", f"shell:AppsFolder\\{GAME_AUMID}"])
+    diagnostics.event('game_activation_dispatched')
     auth_progress.close_when_game_starts(game_is_running)
 
 
@@ -415,12 +420,16 @@ def launcher_visible(visible):
 
 def monitor_accounts(initial,bridge_xuid,bridge_tag):
     for _ in range(120):
-        if game_is_running():break
+        if game_is_running():
+            diagnostics.event('game_process_observed')
+            break
         time.sleep(.5)
     while game_is_running():
         current=account_guard.windows_accounts()
         verdict=account_guard.decision(current,bridge_xuid)
         if verdict!='ready':
+            diagnostics.accounts(current, verdict, bool(bridge_xuid))
+            diagnostics.event('game_stopped_account_check')
             launcher_visible(True)
             # Close this game's process only; never sign out other Windows apps.
             subprocess.run(['taskkill.exe','/IM','Minecraft.Windows.exe','/F'],capture_output=True,
@@ -434,6 +443,7 @@ def monitor_accounts(initial,bridge_xuid,bridge_tag):
         time.sleep(2)
 
 def main() -> int:
+    diagnostics.start()
     parser = argparse.ArgumentParser()
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=32115)
@@ -459,6 +469,7 @@ def main() -> int:
         accounts=account_guard.windows_accounts()
         bridge_xuid,bridge_tag=account_guard.bridge_identity(args.host,args.port)
         verdict=account_guard.decision(accounts,bridge_xuid)
+        diagnostics.accounts(accounts,verdict,bool(bridge_xuid))
         print(account_guard.describe(accounts,bridge_tag),flush=True)
         if verdict in ('windows_mismatch','unverified'):
             account_guard.reject_message(accounts,bridge_tag)
@@ -471,7 +482,7 @@ def main() -> int:
             return 0
         if bridge_xuid:
             account_guard.alert(account_guard.describe(accounts,bridge_tag)+'\n\n'+account_guard.REAUTH_MESSAGE)
-            print('Bridge account differs. Reconnecting to '+accounts.xbox_tag+'...',flush=True)
+            print('Bridge account differs. Reconnecting to '+(accounts.xbox_tag or 'the matching Xbox and Store account')+'...',flush=True)
             account_guard.stop_bridge(args.host,args.port)
 
     # Cache only the packaged launcher; developer probes remain non-persistent.
@@ -480,12 +491,16 @@ def main() -> int:
     if args.launch and getattr(sys,'frozen',False):
         import auth_session_cache as cache
         state=cache.load(accounts.xbox_xuid)
+        diagnostics.event('session_cache_checked', usable=state is not None)
     if state is None:
+        diagnostics.event('interactive_authentication_started')
         state = authenticate(args.timeout, browser_sign_in=args.browser_sign_in)
+        diagnostics.event('interactive_authentication_completed')
     if args.launch:
         import auth_progress
         auth_progress.check_cancelled()
         accounts=account_guard.windows_accounts()
+        diagnostics.accounts(accounts,account_guard.decision(accounts,state.xuid),True)
         if account_guard.decision(accounts,state.xuid)!='ready':
             auth_progress.close()
             account_guard.reject_message(accounts,state.gamertag)
@@ -512,6 +527,7 @@ def main() -> int:
         ) as thumbnail_server,
     ):
         thumbnail_server.thumbnail = thumbnail
+        diagnostics.event('bridge_listeners_ready', ports=[args.port,WALLET_PORT,THUMBNAIL_PORT])
         threading.Thread(target=wallet_server.serve_forever, daemon=True).start()
         threading.Thread(target=thumbnail_server.serve_forever, daemon=True).start()
         log_event(f"WALLET listening on http://{args.host}:{WALLET_PORT}/")
@@ -531,6 +547,7 @@ def main() -> int:
 if __name__ == "__main__":
     try:result=main()
     except Exception as error:
+        diagnostics.event('launcher_exception', error_type=type(error).__name__, winerror=getattr(error,'winerror',None))
         import auth_progress
         auth_progress.close()
         if isinstance(error,auth_progress.SignInCancelled):raise SystemExit(0)

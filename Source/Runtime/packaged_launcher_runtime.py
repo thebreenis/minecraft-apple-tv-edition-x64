@@ -2,6 +2,11 @@
 
 import sys
 import os
+import startup_diagnostics
+startup_diagnostics.event('packaged_launcher_bootstrap')
+def _diagnostic_exception(kind, value, traceback):
+    startup_diagnostics.event('bootstrap_exception', error_type=kind.__name__)
+sys.excepthook = _diagnostic_exception
 
 # Windowed PyInstaller has no stdio. Discard diagnostics rather than opening a
 # console or persisting authentication output. User action uses explicit alerts.
